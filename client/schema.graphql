@@ -1,0 +1,9 @@
+type File {
+        Id: Int,
+        Name: String,
+        RecommendedFiles: [File]
+    }
+
+type AllFiles {
+        Files: [File]
+    }

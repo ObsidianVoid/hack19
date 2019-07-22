@@ -1,0 +1,47 @@
+{
+    "manifestVersion": 1,
+    "id": "hack19",
+    "publisher": "",
+    "version": "1.0.0",
+    "name": "Hack19",
+    "description": "",
+    "public": false,
+    "categories": ["Azure Repos"],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "my-hub",
+            
+      "type": "ms.vss-releaseManagement-web.release-summary-tab",
+      "targets": [ "ms.vss-releaseManagement-web.release-details-view" ],
+      "properties": {
+        "name": "Deployment status",
+        "uri": "index.html",
+        "order": "99"
+      }
+            "type": "ms.vss-web.tab",
+            "targets": [
+                "ms.vss-code-web.code-hub-group"
+            ],
+            "properties": {
+                "name": "My Hub",
+                "uri": "my-hub.html"
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "my-hub.html",
+            "addressable": true
+        },
+        {
+            "path": "node_modules/vss-web-extension-sdk/lib",
+            "addressable": true,
+            "packagePath": "lib"
+        }
+    ]
+}
