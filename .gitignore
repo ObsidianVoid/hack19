@@ -1,2 +1,4 @@
 server/node_modules
+server/bin
+extension/bin
 extension/node_modules
