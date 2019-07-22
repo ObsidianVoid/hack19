@@ -1,4 +1,6 @@
-server/node_modules
-server/bin
+client/node_modules
+client/bin
 extension/bin
 extension/node_modules
+server/node_modules
+server/bin

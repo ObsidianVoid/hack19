@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "node node_modules\\typescript\\bin\\tsc"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,7 @@
     "tfx-cli": "^0.7.8"
   },
   "dependencies": {
-    "vss-web-extension-sdk": "^5.141.0"
+    "vss-web-extension-sdk": "^5.141.0",
+    "typescript": "^3.5.3"
   }
 }
