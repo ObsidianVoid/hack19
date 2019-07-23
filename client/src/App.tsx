@@ -1,25 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import ApolloClient from "apollo-boost";
+import { ApolloProvider  } from "react-apollo";
+import { Query } from "react-apollo";
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { gql } from "apollo-boost";
+import { loadPartialConfig } from '@babel/core';
 
+const cache = new InMemoryCache();
+
+const client = new ApolloClient({
+    uri: 'https://ganes-server.azurewebsites.net/graphql', //Replace with the gql server uri
+    cache
+});
+
+const GQLquery = gql`
+{
+  message
+}
+`;
+
+const GQLqueryComponent: React.FC = () => (
+<Query query = { GQLquery} >
+      {({loading, error, data}) => {
+          if(loading) {
+            return <p>Loading</p>;
+          }
+          if(error) {
+            console.log(error);
+            return <p>Error..</p>;
+          }
+          return data.message;
+        }}
+    </Query>
+); 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <GQLqueryComponent/>
+    </ApolloProvider>
   );
 }
 
