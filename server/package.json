@@ -11,11 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo": "^2.16.1",
     "apollo-server": "^2.7.0",
-    "graphql": "^14.4.2"
+    "gremlin": "^3.4.2"
   },
   "devDependencies": {
-    "apollo": "^2.16.0",
+    "@graphql-codegen/cli": "^1.4.0",
+    "@types/gremlin": "^3.4.1",
+    "graphql": "^14.4.2",
     "typescript": "^3.5.3"
   }
 }
