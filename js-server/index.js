@@ -45,40 +45,34 @@ const files =
 const typeDefs = `
 type File {
     path: String!,
+    url: String!,
     FileRecommendations: [File]
     ContributorRecommendations: [Contributor]
 }
-
 input FileInput {
     path: String!,
     url: String!
 }
-
 type Contributor {
     email: String!,
     name: String!
 }
-
 input ContributorInput {
     email: String!,
     name: String!
 }
-
 type Query {
     file(path: String!): File
 }
-
 input EdgePropertiesInput {
     Key: String!
     Value: String!
 }
-
 input IngestionContract {
     Files: [FileInput]!
     ModifiedBy: ContributorInput
     Properties: [EdgePropertiesInput]
 }
-
 type Mutation {
     IngestPullRequest(pullRequest: IngestionContract!): Contributor
 }
@@ -92,9 +86,11 @@ const resolvers =  {
             var path = args.path;
 
             return GremlinClient.recommendationFn(path).then((data)=>{
+                //console.log(data);
                 data = data["_items"][0].properties;
-                console.log(data);
-                return data;
+                //console.log(data.url[0]);
+                var returnData = {"path": data.path[0].value,"url": data.url[0].value,"FileRecommendations": null,"ContributorRecommendations": null}
+                return returnData;
 
             },(error)=>{
                 console.log("hsakjfhsak");
@@ -133,4 +129,3 @@ app.use('/graphiql',graphiqlExpress({endpointURL: '/graphql'}));
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => console.log('Express GraphQL Server Now Running On localhost:4000/graphql'));
-
