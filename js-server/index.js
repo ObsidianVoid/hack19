@@ -83,6 +83,7 @@ type Mutation {
     IngestPullRequest(pullRequest: IngestionContract!): Contributor
 }
 `;
+
 // Root resolver
 const resolvers =  {
     Query: {
@@ -95,11 +96,7 @@ const resolvers =  {
         IngestPullRequest: (root, args) => {
             console.log("Inside mutation function");
             var pullRequest = args.pullRequest;
-            console.log(pullRequest);
-            console.log(pullRequest.Files[0].path);
-            GremlinClient(pullRequest);
-            console.log(pullRequest.ModifiedBy.email);
-            console.log(pullRequest.ModifiedBy.name);
+            GremlinClient(pullRequest).then(() => { console.log("Completed")}, (error) => { console.log("Error"); console.log(error)});
             var contributor = {"email": pullRequest.ModifiedBy.email, "name": pullRequest.ModifiedBy.name};
             return contributor;
         }
@@ -119,7 +116,7 @@ app.use('/graphql',bodyParser.json(), graphqlExpress({
 }));
 
 //app.use('/graphiql',graphiqlExpress({endpointURL: '/graphql'}));
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4137;
 
 app.listen(PORT, () => console.log('Express GraphQL Server Now Running On localhost:4000/graphql'));
 

@@ -9,35 +9,51 @@ const client = new gremlin.driver.Client(
     {
         authenticator,
         traversalsource: "g",
-        rejectUnauthorized: true,
+        rejectUnauthorized: false,
         mimeType: "application/vnd.gremlin-v2.0+json"
     }
 );
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
 async function Add(pullRequest) {
     // run loops
     // create node for each file
     var key = pullRequest.Properties[0].Key;
     var value = pullRequest.Properties[0].Value;
+    console.log("-------------------------------------");
     for (var i=0;i<pullRequest.Files.length;i++) {
         var file = pullRequest.Files[i];
         var vertex = await client.submit(`g.V().has('path', '${file.path}')`, {});
-        console.log("files " + vertex.length);
-        console.log("path: " + file.url);
+        await sleep(2000);
+        console.log("--files " + vertex.length + "  !" + file.path + "!");
         if (vertex.length === 0) {
             // create vertex
+            if (value === "6") 
+            {
+            console.log("Creating vertex ------------------------------------------------ " + file.path);
+            }
             await client.submit(`g.addV('file').property('pk', 'file').property('url', '${file.url}').property('path', '${file.path}')`, {});
+            await sleep(2000);
+            if (value === "6") 
+            {
+            console.log("Created vertex ------------------------------------------------ " + file.path);
+            }
         }
     }
+    console.log("-------------------------------------");
 
     for (var i=0;i<pullRequest.Files.length;i++) {
         for (var j=0;j<pullRequest.Files.length;j++) {
-                if (i != j) {
+                if (i !== j) {
                 var file1 = pullRequest.Files[i];
                 var file2 = pullRequest.Files[j];
+                console.log("PRID: " + value + " " + i + " " + j + " " + file1.path + " " + file2.path);
                 // add an edge
-                
                 await client.submit(`g.V().has('path', '${file1.path}').addE("isRelated").to(g.V().has('path', '${file2.path}')).property('${key}', '${value}')`);
+                await sleep(2000);
                 }
             }
     }
@@ -51,26 +67,28 @@ async function AddContributors(pullRequest) {
     var email = pullRequest.ModifiedBy.email;
     var name = pullRequest.ModifiedBy.name;
     var vertex = await client.submit(`g.V().has('email', '${email}')`, {});
-    console.log("contributors " + vertex.length);
+    await sleep(2000);
     if (vertex.length === 0) {
         // create vertex
         await client.submit(`g.addV('contributor').property('pk', 'contributor').property('email', '${email}').property('name', '${name}')`, {});
+        await sleep(2000);
     }
 
     for (var i=0;i<pullRequest.Files.length;i++) {
         var file = pullRequest.Files[i];
         // add an edge
         await client.submit(`g.V().has('path', '${file.path}').addE("modifiedBy").to(g.V().has('email', '${email}')).property('${key}', '${value}')`);
+        await sleep(2000);
     }
 }
 
  module.exports = async function AddFile(pullRequest){
     // pullRequest.File[] -> path
     // pullRequest.ModifiedBy -> email and name
-    client.open()
-    .then(() => {
+    return client.open()
+    .then(async () => {
         // check if already exists
-        Add(pullRequest).then(() => { client.close(); });
+        return await Add(pullRequest).then(async () => { await client.close(); });
         // var result = await client.submit(`g.V().has('path', '${name}')`, {});
         // client.close();
             // .then((result) =>{
