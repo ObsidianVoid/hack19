@@ -13,6 +13,7 @@ const cache = new InMemoryCache();
 
 const client = new ApolloClient({
     uri: 'https://ganes-server.azurewebsites.net/graphql', //Replace with the gql server uri
+    //uri: 'http://localhost:4000/graphql',
     cache
 });
 
@@ -22,10 +23,12 @@ query GetRecommendations ($path: String!) {
     path,
     url,
     FileRecommendations{
-      path
+      path,
+      url
     },
     ContributorRecommendations{
-      name
+      name,
+      email
     }
   }
 }
@@ -34,14 +37,20 @@ query GetRecommendations ($path: String!) {
 
 const ContributorRecommendationsComponent = (props) => (
   <div>
-    <h5>Contributors</h5>
+    <h4>Contributors</h4>
     {
       
                 props.contributorData.map(function(object,i){
                   if(object && object.name){
+                    console.log(object);
                   return <div key={i}>
+                    <b>
                     {
-                      object.name
+                      object.name 
+                    }
+                    </b>
+                    {
+                      "\t("+ object.email+")"
                     }
                     </div>;
                 }
@@ -56,14 +65,16 @@ const ContributorRecommendationsComponent = (props) => (
 )
 const FileRecommendationsComponent = (props) => (
   <div>
-    <h5>Files</h5>
+    <h4>Files</h4>
     {
                 props.fileData.map(function(object,i){
                   if(object && object.path){
                   return <div key={i}>
+                    <a href = {object.url} target="_blank">
                     {
-                      object.path
+                      object.path 
                     }
+                    </a>
                     </div>;
                 }
                 else{
@@ -86,16 +97,23 @@ const GQLqueryComponent = (props) => (
           }
           if(error) {
             console.log(error);
-            return <p>Error..</p>;
+            return <p>No File Found:(</p>;
           }
+          if(data){
           return (
+            
             <div>
-              {data.file?<p>{data.file.path}</p>:<p>No File</p>}
-              {data.file?<p>{data.file.url}</p>:<p>No File</p>}
+              {data.file?<p><a href="{data.file.url}">{data.file.path}</a></p>:<p>No File</p>}
               {data.file && data.file.FileRecommendations?<FileRecommendationsComponent fileData={data.file.FileRecommendations}></FileRecommendationsComponent>:<p>No FR</p>}
               {data.file && data.file.ContributorRecommendations?<ContributorRecommendationsComponent contributorData={data.file.ContributorRecommendations}></ContributorRecommendationsComponent>:<p>No CR</p>}
             </div>
           );
+          }
+          else{
+            return(<div>
+              <p>File Not Available</p>
+            </div>);
+          }
         }}
     </Query>
 ); 

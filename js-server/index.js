@@ -87,10 +87,31 @@ const resolvers =  {
             var path = args.path;
 
             return GremlinClient.recommendationFn(path).then((data)=>{
-                //console.log(data);
-                data = data["_items"][0].properties;
-                //console.log(data.url[0]);
-                var returnData = {"path": data.path[0].value,"url": data.url[0].value,"FileRecommendations": null,"ContributorRecommendations": null}
+            
+                var fileInfo = data.finalResult["_items"][0].properties;
+                var contributorInfo = data.finalContributorList["_items"];
+                var fileRecommendationsInfo = data.finalFinalList["_items"];
+                var contributorList = [];
+                for(var individualContributor in contributorInfo){
+
+                    var obj={
+                        "email": contributorInfo[individualContributor].properties.email[0].value,
+                        "name": contributorInfo[individualContributor].properties.name[0].value
+                    }
+                    contributorList.push(obj);
+                }
+                
+                var fileList = [];
+                for(var individualFile in fileRecommendationsInfo){
+                    var obj={
+                        "path": fileRecommendationsInfo[individualFile].properties.path[0].value,
+                        "url": fileRecommendationsInfo[individualFile].properties.url[0].value
+                    }
+                    fileList.push(obj);
+                }
+                fileList = fileList.reverse();
+                contributorList = contributorList.reverse();
+                var returnData = {"path": fileInfo.path[0].value,"url": fileInfo.url[0].value,"FileRecommendations": fileList,"ContributorRecommendations": contributorList}
                 return returnData;
 
             },(error)=>{

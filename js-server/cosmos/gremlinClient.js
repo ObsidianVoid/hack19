@@ -62,7 +62,14 @@ async function Add(pullRequest) {
 }
 async function getRecom(path){
     var result = await client.submit(`g.V().has('path','${path}')`,{});
-    return result;
+    var contributorResults = await client.submit(`g.V().has('label','contributor').inE('modifiedBy').where(otherV().has('path','${path}')).inV().dedup().order().by(inE('modifiedBy').where(otherV().has('path','${path}')).count())`,{});
+    var fileResults = await client.submit(`g.V().has('label','file').inE("isRelated").where(otherV().has('path','${path}')).inV().dedup().order().by(inE('isRelated').where(otherV().has('path','${path}')).count())`,{});
+    var Obj ={
+     finalResult: result,
+     finalContributorList: contributorResults,
+     finalFinalList: fileResults
+    }
+    return Obj;
 }
 async function AddContributors(pullRequest) {
     var key = pullRequest.Properties[0].Key;
