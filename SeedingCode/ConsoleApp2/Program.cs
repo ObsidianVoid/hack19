@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.Client;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
@@ -86,9 +86,9 @@ namespace ConsoleApp2
                     }
                 }
 
-                string linkByAnirudh = "http://localhost:4137/graphql";
+                string graphqlServer = "https://ganes-server.azurewebsites.net/graphql";
 
-                var graphQlCLient = new GraphQL.Client.GraphQLClient(linkByAnirudh);
+                var graphQlCLient = new GraphQL.Client.GraphQLClient(graphqlServer);
 
                 var q = new GraphQL.Common.Request.GraphQLRequest();
 
