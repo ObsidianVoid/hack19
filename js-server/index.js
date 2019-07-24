@@ -17,6 +17,7 @@ const files =
         FileRecommendations: [
             {
                 path: "file2",
+                url: "https://www.bing.com"
             }
         ],
         ContributorRecommendations: [
@@ -31,9 +32,11 @@ const files =
         FileRecommendations: [
             {
                 path: "file1",
+                url: "https://www.bing.com"
             },
             {
                 path: "file3",
+                url: "https://www.bing.com"
             }
         ],
     }
@@ -47,7 +50,8 @@ type File {
 }
 
 input FileInput {
-    path: String!
+    path: String!,
+    url: String!
 }
 
 type Contributor {
