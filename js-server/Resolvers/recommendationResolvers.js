@@ -1,5 +1,4 @@
-import {files} from '../Utils'
-import * as GremlinClient from '../../cosmos/gremlinClient'
+const files = require("./Utils");
 
 const resolvers = {
     Query: {
@@ -11,8 +10,6 @@ const resolvers = {
     Mutation: {
         IngestPullRequest: (parent, args) => {
             var pullRequest = args.pullRequest;
-
-            GremlinClient.AddFile(pullRequest.Files[0].Name);
             
             var contributor = {"Id": pullRequest.ModifiedBy.Id, "Name": pullRequest.ModifiedBy.Name};
             return contributor;
@@ -20,4 +17,4 @@ const resolvers = {
     }
 }
 
-export default resolvers;
+module.exports.mainResolver = resolvers;
