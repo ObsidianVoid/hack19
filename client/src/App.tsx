@@ -38,12 +38,19 @@ const ContributorRecommendationsComponent = (props) => (
     {
       
                 props.contributorData.map(function(object,i){
+                  if(object && object.name){
                   return <div key={i}>
                     {
                       object.name
                     }
                     </div>;
-                })
+                }
+                else{
+                    return <div>
+                      No Contributors Available
+                      </div>;
+                }
+              })
               }
   </div>
 )
@@ -52,12 +59,19 @@ const FileRecommendationsComponent = (props) => (
     <h5>Files</h5>
     {
                 props.fileData.map(function(object,i){
+                  if(object && object.name){
                   return <div key={i}>
                     {
                       object.name
                     }
                     </div>;
-                })
+                }
+                else{
+                  return <div>
+                    No File Recommendations
+                    </div>;
+                }
+              })
               }
   </div>
 )
@@ -76,9 +90,9 @@ const GQLqueryComponent = (props) => (
           }
           return (
             <div>
-              <p>{data.file.name}</p>
-              <FileRecommendationsComponent fileData={data.file.FileRecommendations}></FileRecommendationsComponent>
-              <ContributorRecommendationsComponent contributorData={data.file.ContributorRecommendations}></ContributorRecommendationsComponent>
+              {data.file?<p>{data.file.name}</p>:<p>No File</p>}
+              {data.file && data.file.FileRecommendations?<FileRecommendationsComponent fileData={data.file.FileRecommendations}></FileRecommendationsComponent>:<p>No FR</p>}
+              {data.file && data.file.ContributorRecommendations?<ContributorRecommendationsComponent contributorData={data.file.ContributorRecommendations}></ContributorRecommendationsComponent>:<p>No CR</p>}
             </div>
           );
         }}
