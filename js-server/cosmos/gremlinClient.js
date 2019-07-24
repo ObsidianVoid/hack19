@@ -23,9 +23,10 @@ async function Add(pullRequest) {
         var file = pullRequest.Files[i];
         var vertex = await client.submit(`g.V().has('path', '${file.path}')`, {});
         console.log("files " + vertex.length);
+        console.log("path: " + file.url);
         if (vertex.length === 0) {
             // create vertex
-            await client.submit(`g.addV('file').property('pk', 'file').property('path', '${file.path}')`, {});
+            await client.submit(`g.addV('file').property('pk', 'file').property('url', '${file.url}').property('path', '${file.path}')`, {});
         }
     }
 
