@@ -17,12 +17,12 @@ const client = new ApolloClient({
 });
 
 const GQLquery = gql`
-query GetRecommendations ($id: Int!) {
-  file(id: $id){
-    id,
-    name,
+query GetRecommendations ($path: String!) {
+  file(path: $path){
+    path,
+    url,
     FileRecommendations{
-      name
+      path
     },
     ContributorRecommendations{
       name
@@ -59,10 +59,10 @@ const FileRecommendationsComponent = (props) => (
     <h5>Files</h5>
     {
                 props.fileData.map(function(object,i){
-                  if(object && object.name){
+                  if(object && object.path){
                   return <div key={i}>
                     {
-                      object.name
+                      object.path
                     }
                     </div>;
                 }
@@ -78,7 +78,7 @@ const FileRecommendationsComponent = (props) => (
 
 const GQLqueryComponent = (props) => (
 
-<Query query = { GQLquery} variables={{ id : props.textData }}>
+<Query query = { GQLquery} variables={{ path : props.textData }}>
       {({loading, error, data}) => {
   
           if(loading) {
@@ -90,7 +90,8 @@ const GQLqueryComponent = (props) => (
           }
           return (
             <div>
-              {data.file?<p>{data.file.name}</p>:<p>No File</p>}
+              {data.file?<p>{data.file.path}</p>:<p>No File</p>}
+              {data.file?<p>{data.file.url}</p>:<p>No File</p>}
               {data.file && data.file.FileRecommendations?<FileRecommendationsComponent fileData={data.file.FileRecommendations}></FileRecommendationsComponent>:<p>No FR</p>}
               {data.file && data.file.ContributorRecommendations?<ContributorRecommendationsComponent contributorData={data.file.ContributorRecommendations}></ContributorRecommendationsComponent>:<p>No CR</p>}
             </div>
@@ -123,7 +124,7 @@ export class App extends Component<{}, any>{
         <input type="text" id="inputFileId" name="textValue" value={this.state.textValue} 
     onChange={this.handleChange.bind(this)}></input>
         <input type="button" id="inputButton" value ="Submit" onClick={this.handler}></input>
-        {this.state.isClicked?<GQLqueryComponent textData={parseInt(this.state.textValue,10)}/>:null}
+        {this.state.isClicked?<GQLqueryComponent textData={this.state.textValue}/>:null}
       </ApolloProvider>
     );
   }
