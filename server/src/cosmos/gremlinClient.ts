@@ -16,7 +16,7 @@ const client = new Gremlin.driver.Client(
 export function AddFile(name: string){
     client.open()
     .then(() => {
-        client.submit(`g.addV('file').property('name', '${name}')`, {})
+        client.submit(`g.addV('file').property('path', '${name}')`, {})
             .then((result) => {
                 client.close();
                 console.log(result);

@@ -2,25 +2,23 @@ import {gql} from 'apollo-server';
 
 const typeDefs = gql`
     type File {
-        Id: Int!,
-        Name: String!,
+        path: String!,
         FileRecommendations: [File]
         ContributorRecommendations: [Contributor]
     }
 
     input FileInput {
-        Id: Int!,
-        Name: String!
+        path: String!
     }
 
     type Contributor {
-        Id: Int!,
-        Name: String!
+        email: String!,
+        name: String!
     }
 
     input ContributorInput {
-        Id: Int!,
-        Name: String!
+        email: String!,
+        name: String!
     }
 
     type Query {

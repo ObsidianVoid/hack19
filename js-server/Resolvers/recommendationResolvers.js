@@ -3,7 +3,7 @@ const files = require("./Utils");
 const resolvers = {
     Query: {
         file: (parent, args) => {
-            return files.find(file => file.Id == args.id);
+            return files.find(file => file.id == args.id);
         }
     },
 
@@ -11,7 +11,7 @@ const resolvers = {
         IngestPullRequest: (parent, args) => {
             var pullRequest = args.pullRequest;
             
-            var contributor = {"Id": pullRequest.ModifiedBy.Id, "Name": pullRequest.ModifiedBy.Name};
+            var contributor = {"id": pullRequest.ModifiedBy.id, "name": pullRequest.ModifiedBy.name};
             return contributor;
         }
     }

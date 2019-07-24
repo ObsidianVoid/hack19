@@ -4,7 +4,7 @@ import * as GremlinClient from '../../cosmos/gremlinClient'
 const resolvers = {
     Query: {
         file: (parent, args) => {
-            return files.find(file => file.Id == args.id);
+            return files.find(file => file.path == args.path);
         }
     },
 
@@ -12,9 +12,9 @@ const resolvers = {
         IngestPullRequest: (parent, args) => {
             var pullRequest = args.pullRequest;
 
-            GremlinClient.AddFile(pullRequest.Files[0].Name);
+            GremlinClient.AddFile(pullRequest.Files[0].path);
             
-            var contributor = {"Id": pullRequest.ModifiedBy.Id, "Name": pullRequest.ModifiedBy.Name};
+            var contributor = {"email": pullRequest.ModifiedBy.email, "name": pullRequest.ModifiedBy.name};
             return contributor;
         }
     }

@@ -1,32 +1,27 @@
 export const files = 
 [
     {
-        Id: 1,
-        Name: "file1",
+        path: "file1",
         FileRecommendations: [
             {
-                Id: 2,
-                Name: "file2",
+                path: "file2",
             }
         ],
         ContributorRecommendations: [
             {
-                Id: 1,
-                Name: "Anirudh"
+                email: "anraghun@microsoft.com",
+                name: "Anirudh"
             }
         ]
     },
     {
-        Id: 2,
-        Name: "file2",
+        path: "file2",
         FileRecommendations: [
             {
-                Id: 1,
-                Name: "file1",
+                path: "file1",
             },
             {
-                Id: 3,
-                Name: "file3",
+                path: "file3",
             }
         ],
     }

@@ -13,32 +13,27 @@ var cors = require('cors')
 const files = 
 [
     {
-        id: 1,
-        name: "file1",
+        path: "file1",
         FileRecommendations: [
             {
-                id: 2,
-                name: "file2",
+                path: "file2",
             }
         ],
         ContributorRecommendations: [
             {
-                id: 1,
-                name: "Anirudh"
+                email: "ankhokha@microsoft.com",
+                name: "Ankit"
             }
         ]
     },
     {
-        id: 2,
-        name: "file2",
+        path: "file2",
         FileRecommendations: [
             {
-                id: 1,
-                name: "file1",
+                path: "file1",
             },
             {
-                id: 3,
-                name: "file3",
+                path: "file3",
             }
         ],
     }
@@ -46,29 +41,27 @@ const files =
 
 const typeDefs = `
 type File {
-    id: Int!,
-    name: String!,
+    path: String!,
     FileRecommendations: [File]
     ContributorRecommendations: [Contributor]
 }
 
 input FileInput {
-    id: Int!,
-    name: String!
+    path: String!
 }
 
 type Contributor {
-    id: Int!,
+    email: String!,
     name: String!
 }
 
 input ContributorInput {
-    id: Int!,
+    email: String!,
     name: String!
 }
 
 type Query {
-    file(id: Int!): File
+    file(path: String!): File
 }
 
 input EdgePropertiesInput {
@@ -90,15 +83,20 @@ type Mutation {
 const resolvers =  {
     Query: {
         file: (parent, args) => {
-            return files.find(file => file.id == args.id);
+            return files.find(file => file.path == args.path);
         }
     },
 
     Mutation: {
         IngestPullRequest: (root, args) => {
+            console.log("Inside mutation function");
             var pullRequest = args.pullRequest;
-            GremlinClient(pullRequest.Files[0].name);
-            var contributor = {"id": pullRequest.ModifiedBy.id, "name": pullRequest.ModifiedBy.name};
+            console.log(pullRequest);
+            console.log(pullRequest.Files[0].path);
+            GremlinClient(pullRequest);
+            console.log(pullRequest.ModifiedBy.email);
+            console.log(pullRequest.ModifiedBy.name);
+            var contributor = {"email": pullRequest.ModifiedBy.email, "name": pullRequest.ModifiedBy.name};
             return contributor;
         }
     }
@@ -108,6 +106,7 @@ const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
 });
+
 // Create an express server and a GraphQL endpoint
 var app = express();
 app.use(cors())
@@ -115,8 +114,8 @@ app.use('/graphql',bodyParser.json(), graphqlExpress({
     schema
 }));
 
-app.use('/graphiql',graphiqlExpress({endpointURL: '/graphql'}));
-const PORT = process.env.PORT || 5000;
+//app.use('/graphiql',graphiqlExpress({endpointURL: '/graphql'}));
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => console.log('Express GraphQL Server Now Running On localhost:4000/graphql'));
 

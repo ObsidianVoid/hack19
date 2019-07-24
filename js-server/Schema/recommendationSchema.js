@@ -1,23 +1,23 @@
 const typeDefs = `
     type File {
-        Id: Int!,
+        id: Int!,
         Name: String!,
         FileRecommendations: [File]
         ContributorRecommendations: [Contributor]
     }
 
     input FileInput {
-        Id: Int!,
+        id: Int!,
         Name: String!
     }
 
     type Contributor {
-        Id: Int!,
+        id: Int!,
         Name: String!
     }
 
     input ContributorInput {
-        Id: Int!,
+        id: Int!,
         Name: String!
     }
 
