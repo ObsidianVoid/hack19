@@ -83,7 +83,18 @@ type Mutation {
 const resolvers =  {
     Query: {
         file: (parent, args) => {
-            return files.find(file => file.path == args.path);
+            //return files.find(file => file.path == args.path);
+        
+            var path = args.path;
+
+            return GremlinClient.recommendationFn(path).then((data)=>{
+                data = data["_items"][0].properties;
+                console.log(data);
+                return data;
+
+            },(error)=>{
+                console.log("hsakjfhsak");
+            });
         }
     },
 
@@ -114,7 +125,7 @@ app.use('/graphql',bodyParser.json(), graphqlExpress({
     schema
 }));
 
-//app.use('/graphiql',graphiqlExpress({endpointURL: '/graphql'}));
+app.use('/graphiql',graphiqlExpress({endpointURL: '/graphql'}));
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => console.log('Express GraphQL Server Now Running On localhost:4000/graphql'));

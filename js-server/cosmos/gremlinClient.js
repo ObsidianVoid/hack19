@@ -43,7 +43,10 @@ async function Add(pullRequest) {
 
     await AddContributors(pullRequest);
 }
-
+async function getRecom(path){
+    var result = await client.submit(`g.V().has('path','${path}')`,{});
+    return result;
+}
 async function AddContributors(pullRequest) {
     var key = pullRequest.Properties[0].Key;
     var value = pullRequest.Properties[0].Value;
@@ -86,4 +89,18 @@ async function AddContributors(pullRequest) {
             //     console.log(error);
             // });
  });
+}
+
+module.exports.recommendationFn=async function GetRecommendations(path){
+
+    return client.open()
+    .then((result) => {
+         return getRecom(path).then((value)=>{
+            client.close();
+            return value;
+        },(error)=>{
+            console.log(error);
+        });
+    });
+    
 }
